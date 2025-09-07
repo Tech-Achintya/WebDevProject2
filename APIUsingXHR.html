@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: #333;
+    }
+
+    h1 {
+      color: #fff;
+      margin-bottom: 15px;
+      font-size: 28px;
+    }
+
+    input, button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 280px;
+      outline: none;
+    }
+
+    button {
+      background: #ff7e5f;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #eb5757;
+    }
+
+    #box {
+      display: none;
+      width: 350px;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      background: #fff;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    #photo {
+      background-color: #f3f3f3;
+      background-size: cover;
+      background-position: center;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 10px 0;
+      color: #444;
+    }
+
+    span {
+      font-weight: normal;
+      color: #666;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <h1>OctoCard 🐙</h1>
+  <span style="color: white;">Enter GitHub API URL:</span>
+  <input type="text" id="geturl" placeholder="e.g. https://api.github.com/users/octocat"> 
+  <button id="button">Fetch</button>
+
+  <div id="box">
+    <div id="photo"></div>
+    <h2>Name: <span id="name"></span></h2>
+    <h2>Email: <span id="email"></span></h2>
+    <h2>ID: <span id="id"></span></h2>
+    <h2>Bio: <span id="bio"></span></h2>
+  </div>
+</body> 
+<script>
+    document.querySelector("#button").addEventListener('click',function(){
+    const requestUrl = document.getElementById("geturl").value;
+    document.querySelector("#box").style.display = "block";
+    const xml = new XMLHttpRequest();
+    xml.open('GET',requestUrl);
+    xml.onreadystatechange = function(){
+        if(xml.readyState===4){
+            console.log("Request Recevied !");
+            const data = JSON.parse(this.responseText);
+            const image = data.avatar_url;
+            document.querySelector("#photo").style.backgroundImage = `url('${image}')`;
+            document.querySelector("#name").innerHTML = data.login;
+            document.querySelector("#id").innerHTML = data.id;
+            document.querySelector("#bio").innerHTML = data.bio;
+            document.querySelector("#email").innerHTML = data.email;
+        }
+    }
+    xml.send();
+    })
+    
+</script>
+</html>
